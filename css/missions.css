@@ -21,6 +21,7 @@ h1{
     border-radius: 10px;
     overflow: hidden;
     float: left;
+    font-size: 1em;
 }
 
 .m-head{
@@ -71,7 +72,7 @@ h1{
 
 .m-body{
     height: 7.5em;
-    font-size: 1em;
+    overflow-y: scroll;
 }
 .m-body > div{
     box-sizing: border-box;
@@ -121,8 +122,13 @@ h1{
     float: left;
 }
 .p-text{
-    padding: 0.25em 1em;
+    padding: 0.3em 1em;
     position: absolute;
+    max-width: 70%;
+    overflow-x: hidden;
+    word-break: break-all;
+    height: 0.9em;
+    overflow-y: hidden;
 }
 .p-val{
     padding: 0.25em 1em;
@@ -158,9 +164,6 @@ h1{
 }
 .m-footer div:last-child{
     border-right: 0;
-}
-.m-date{
-    font-size: 1em;
 }
 .m-days{
     font-size: 0.8em;

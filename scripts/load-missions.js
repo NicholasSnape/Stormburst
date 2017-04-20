@@ -79,7 +79,6 @@ function getTotalPercentage(mission, dp = 2){
 }
 
 $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, status){
-    console.log("Data Gotten");
     if (status != "success"){
         $("#status > h2").html("Missions couldn't be loaded. Please try again later.").addClass("error");
         return;
@@ -133,64 +132,143 @@ $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, st
         }
         
         //Prizes
-        /*if (typeof missions[m_id]["prizes"] == 'object'){
-            let i = 0;
-            let prizes = [];
-            while ((i < missions[m_id]["prizes"].length) && (prizes.length < 3)){
+        if (typeof missions[m_id]["prizes"] == 'undefined'){
+            missionClone.children(".m-body").append('<div class="prize"><p class="p-text">ERROR</p></div>');
+            console.log("[ERROR] Prizes not found in mission " + m_id + ".");
+        }else if (typeof missions[m_id]["prizes"] != 'object'){
+            missionClone.children(".m-body").append('<div class="prize"><p class="p-text">ERROR</p></div>');
+            console.log("[ERROR] Prizes is not an object in mission " + m_id + ".");
+        }else{
+            // Get percentage 
+            let talley = "";
+            if (typeof missions[m_id]["performance"] == 'object'){
+                talley = getTotalPerformance(missions[m_id]["performance"], m_id);
+            } else {
+                missionClone.children(".m-body").append('<div class="prize"><p class="p-text">ERROR</p></div>');
+                console.log("[ERROR] Performance is not an object in mission " + m_id);
             }
-        } else {
-            missionClone.children(".m-body").children(".prize").children(".m-task").html(missions[m_id]["description"]);
-            console.log("[ERROR] No prizes found on mission " + m_id);
-        }*/
+            if (isNaN(talley)){
+                missionClone.children(".m-body").append('<div class="prize"><p class="p-text">ERROR</p></div>');
+                console.log("[ERROR] " + talley);
+            }else{
+                let prevPercent = 100;
+                $.each(missions[m_id]["prizes"], function(p){
+                    let output = '<div class="prize">';
+                    if (typeof missions[m_id]["prizes"][p]["threshold"] == 'undefined'){
+                        output += '<p class="p-val">ERROR</p>';
+                        console.log("[ERROR] Prize " + missions[m_id]["prizes"][p]["id"] + " threshold is undefined.");
+                    }else if (isNaN(missions[m_id]["prizes"][p]["threshold"])){
+                        output += '<p class="p-val">ERROR</p>';
+                        console.log("[ERROR] Prize " + missions[m_id]["prizes"][p]["id"] + " threshold is not a number.");
+                    }else{
+                        let percent = ((talley/missions[m_id]["prizes"][p]["threshold"])*100).toFixed(0);
+                        let cssPercent = 0;
+                        if (prevPercent == 100){
+                            if (percent >= 75){
+                                cssPercent = 75;
+                            }else if(percent >= 50){
+                                cssPercent = 50;
+                            }else if(percent >= 25){
+                                cssPercent = 25;
+                            }
+                        } else{
+                            percent = 0;
+                        }
+                        
+                        output += '<div class="p-prog p-prog-' + cssPercent + '" style="width: ' + percent + '%">';
+                        if (typeof missions[m_id]["prizes"][p]["name"] == 'undefined'){
+                            output += '<p class="p-text">ERROR</p>';
+                            console.log("[ERROR] Prize " + p + " has no name.")
+                        } else {
+                            output += '<p class="p-text">' + missions[m_id]["prizes"][p]["name"] + '</p>';
+                        }
+                        output += '</div>';
+                        if (percent <= 100){
+                            if (prevPercent == 100){
+                                prevPercent = percent;
+                                output += '<p class="p-val">' + percent +'%</p>';
+                            }else{
+                                prevPercent = percent;
+                                output += '<p class="p-val">LOCKED</p>';
+                            }
+                            
+                        }else{
+                            prevPercent = 100;
+                            output += '<p class="p-val">100%</p>';
+                        }
+                         
+                    }
+                    output += '</div>';
+                    missionClone.children(".m-body").append(output);
+                });
+            }
+        }
+        
+        // Footer
+        // Start date
+        if (typeof missions[m_id]["start_date"] == 'undefined'){
+            missionClone.children(".m-footer").children(".m-start").children(".m-date").html("ERROR");
+            missionClone.children(".m-footer").children(".m-start").children(".m-days").html("ERROR");
+            console.log("[ERROR] Start date is undefined for mission " + m_id);
+        }else{
+            missionClone.children(".m-footer").children(".m-start").children(".m-date").html(missions[m_id]["start_date"].substr(9));
+            missionClone.children(".m-footer").children(".m-start").children(".m-days").html(missions[m_id]["start_date"].substr(0,8));
+        }
+        
+        // Time left
+        if ((typeof missions[m_id]["start_date"] == 'undefined') || (typeof missions[m_id]["end_date"] == 'undefined')){
+            missionClone.children(".m-footer").children(".m-prog").children(".m-days").html("ERROR");
+        }else{
+            const _second = 1000;
+            const _minute = _second * 60;
+            const _hour = _minute * 60;
+            const _day = _hour * 24;
+            let timer;
+            
+            function startCountdown(){
+                let today = new Date();
+                
+                endDate = missions[m_id]["end_date"].substr(0,9);
+                endDate += missions[m_id]["end_date"].substr(12,3);
+                endDate += missions[m_id]["end_date"].substr(9,3);
+                endDate += missions[m_id]["end_date"].substr(15);
+                endDate = new Date(endDate);
+
+                const timeLeft = endDate-today;
+
+                if (!isNaN(timeLeft)){
+                    if (timeLeft <= 0){
+                        missionClone.children(".m-footer").children(".m-prog").children(".m-days").html("00:00:00:00");
+                        clearInterval(timer)
+                        return;
+                    } else {
+                        const days = Math.floor(timeLeft / _day);
+                        const hours = Math.floor((timeLeft % _day) / _hour);
+                        const minutes = Math.floor((timeLeft % _hour) / _minute);
+                        const seconds = Math.floor((timeLeft % _minute) / _second);
+                        
+                        missionClone.children(".m-footer").children(".m-prog").children(".m-days").html(days + ':' + ("0" + hours).slice(-2) + ':' + ("0" + minutes).slice(-2) + ':' + ("0" + seconds).slice(-2));
+                    }
+                } else {
+                    missionClone.children(".m-footer").children(".m-prog").children(".m-days").html("ERROR");
+                    console.log("[ERROR] Time left is not a number for mission " + m_id);
+                    clearInterval(timer)
+                    return;
+                }
+            }
+            timer = setInterval(startCountdown, 1000);
+        }
+        
+        // End date
+        if (typeof missions[m_id]["end_date"] == 'undefined'){
+            missionClone.children(".m-footer").children(".m-end").children(".m-date").html("ERROR");
+            missionClone.children(".m-footer").children(".m-end").children(".m-days").html("ERROR");
+            console.log("[ERROR] End date is undefined for mission " + m_id);
+        }else{
+            missionClone.children(".m-footer").children(".m-end").children(".m-date").html(missions[m_id]["end_date"].substr(9));
+            missionClone.children(".m-footer").children(".m-end").children(".m-days").html(missions[m_id]["end_date"].substr(0,8));
+        }
         
         missionClone.appendTo($("#main-container"));
     });
-    
-    
-    /*let output = "";
-    $.each(missions, function(m_id){//mission id
-        output += '<div id="' + m_id + '" class="mission">';
-        output += '<div class="m-head">';
-        output += '<div class="m-head-left">';
-        if (typeof missions[m_id]["name"] != 'undefined'){
-            output += '<p>' + missions[m_id]["name"] + '</p>';
-        } else {
-            output += '<p>Error</p>';
-        }
-        
-        output += '</div>';
-        output += '<div class="m-head-right">';
-        output += '<button onclick="editMission(this.value)" value=' + m_id + '>&#9881;</button>';
-        const totalPercentage = getTotalPercentage(missions[m_id], 0);//returns either a number to dp given or an error string
-        if (isNaN(totalPercentage)){
-            console.log("[ERROR] " + totalPercentage);
-            output += '<p class="m-completion">Error</p>';
-        }else{
-            output += '<p class="m-completion">' + totalPercentage + '% complete</p>';
-        }
-        output += '</div></div>';
-        
-        output += '<div class="m-body">';
-        output += '<div class="m-desc">';
-        output += '<p class="m-players">' + missions[m_id]["members"].length + ' players</p>';
-        output += '<p class="m-task">' + missions[m_id]["description"] + '</p>';
-        output += '</div></div>';
-        
-        if (typeof missions[m_id]["prizes"] == 'object'){
-            let i = 0;
-            let prizes = [];
-            while ((i < missions[m_id]["prizes"].length) && (prizes.length < 3)){
-                output += '<div class="prize">';
-                //output += '<div class="p-prog p-prog" style="width: ' + getPrizePercentage(missions[m_id]["prizes"][i]) + '%">';
-                output += '</div>';
-                output += '</div>';
-            }
-        } else {
-            console.log("[ERROR] No prizes found on mission " + m_id);
-            output += '<div class="m-desc">No prizes found on mission' + m_id + "</div>";
-        }
-        
-        output += '</div>';
-        $("#main-container").html(output);
-    });*/
 }); 
