@@ -1,0 +1,167 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: "Lucida Sans";
+}
+
+header{
+    background-color: #555;
+    padding: 20px;
+}
+
+h1{
+    color: white;
+    margin: 0;
+}
+
+.mission{
+    margin: 5px;
+    box-sizing: border-box;
+    width: calc(33% - 10px);
+    border-radius: 10px;
+    overflow: hidden;
+    float: left;
+}
+
+.m-head{
+    box-sizing: border-box;
+    background-color: lightsteelblue;
+    padding: 0.5em;
+    height: 2em;
+}
+.m-head-left{
+    float: left;
+    width: 55%;
+    height: 1.15em;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.m-head-left:hover ~ .m-head {
+    height: auto;
+}
+.m-head-left:hover{
+    width: 100%;
+}
+.m-head-left:hover + .m-head-right{
+    display: none;
+}
+.m-head-right{
+    box-sizing: border-box;
+    float: right;
+    width: 40%;
+}
+.m-head-right p{
+    float: right;
+}
+.m-head-right button{
+    background: transparent;
+    border: 0;
+    font-size: 1.5em;
+    float: right;
+    margin: -10px 0;
+}
+.m-head-right button:hover{
+    cursor: pointer;
+}
+.m-completion{
+    margin-right: 10px;
+}
+
+.m-body{
+    height: 7.5em;
+    font-size: 1em;
+}
+.m-body > div{
+    box-sizing: border-box;
+    margin: 0.5em 0.5em;
+}
+.m-desc{
+    height: 1.4em;
+}
+.m-players{
+    float: left;
+}
+.m-task{
+    text-align: right;
+    width: 70%;
+    float: right;
+    height: 1.15em;
+    overflow-y: hidden;
+}
+.m-task:before{
+    content: "◄ ";
+}
+.m-desc:hover > .m-players{
+    display: none;
+}
+.m-desc:hover > .m-task{
+    width: 100%;
+    height: auto;
+}
+.m-desc:hover > .m-task:before{
+    width: 100%;
+    content: "► ";
+}
+.prize{
+    height: 2em;
+    border-radius: 1em;
+    border: lightgrey 2px solid;
+    width: calc(100% - 20px);
+    background-color: lightgrey;
+    overflow: hidden;
+    position: relative;
+}
+.p-prog{
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0;
+    z-index: 0;
+    float: left;
+}
+.p-text{
+    padding: 0.25em 1em;
+    position: absolute;
+}
+.p-val{
+    padding: 0.25em 1em;
+    position: absolute;
+    right: 0;
+}
+.p-prog-0{
+    background-color: red;
+}
+.p-prog-25{
+    background-color: #FFD700;
+}
+.p-prog-50{
+    background-color: yellow;
+}
+.p-prog-75{
+    background-color: limegreen;
+}
+
+.m-footer{
+    background-color: aliceblue;
+    height: 3em;
+    padding: 0.5em 0;
+    box-sizing: border-box;
+}
+.m-footer div{
+    box-sizing: border-box;
+    width: 33%;
+    height: 100%;
+    border-right: 1px solid black;
+    float: left;
+    text-align: center;
+}
+.m-footer div:last-child{
+    border-right: 0;
+}
+.m-date{
+    font-size: 1em;
+}
+.m-days{
+    font-size: 0.8em;
+}
