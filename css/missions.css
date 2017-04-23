@@ -73,6 +73,7 @@ h1{
 .m-body{
     height: 7.5em;
     overflow-y: scroll;
+    background-color: white;
 }
 .m-body > div{
     box-sizing: border-box;
@@ -118,7 +119,6 @@ h1{
     box-sizing: border-box;
     height: 100%;
     margin: 0;
-    z-index: 0;
     float: left;
 }
 .p-text{
@@ -167,4 +167,25 @@ h1{
 }
 .m-days{
     font-size: 0.8em;
+}
+
+.edit-mission{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 5;
+}
+.edit-mission > .mission{
+    width: 50%;
+    margin: auto;
+    float: none;
+}
+.edit-mission .m-body{
+    overflow-y: auto;
+    height: auto;
+}
+.edit-mission button {
+    margin:0;
+    font-size: 1em;
 }
