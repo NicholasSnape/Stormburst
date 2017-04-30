@@ -1,6 +1,28 @@
 const editMissionClone = $(".edit-mission").clone();
 let descClone;
 
+function saveMissionName(m_id){
+    /*const name = $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").children("input").val();
+    const uMission = {
+        id : parseInt(m_id),
+        description : desc,
+        start_date : missions[m_id]["start_date"],
+        end_date : missions[m_id]["end_date"],
+        members : missions[m_id]["members"]
+    }
+    
+    $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
+        if (status == "success"){
+            missions[m_id]["description"] = desc;
+            updateCard(m_id);
+            $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
+            closeEdit(m_id);
+        }else {
+            console.log(status);
+        }
+    });*/
+}
+
 function editMissionName(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").children().remove()
     
@@ -28,14 +50,12 @@ function saveMissionDesc(m_id){
         end_date : missions[m_id]["end_date"],
         members : missions[m_id]["members"]
     }
-    missions[m_id]["description"] = desc;
-    updateCard(m_id);
     
-    $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
+    $.post("https://www.oneupsales.io/tech-test/create-mission", function(desc, status){
         if (status == "success"){
-            missions[m_id] = uMission;
-            $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
+            missions[m_id]["description"] = desc;
             updateCard(m_id);
+            $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
             closeEdit(m_id);
         }else {
             console.log(status);
