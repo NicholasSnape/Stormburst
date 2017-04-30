@@ -54,7 +54,7 @@ function saveMissionDesc(m_id){
         if (status == "success"){
             missions[m_id]["description"] = desc;
             updateCard(m_id);
-            $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
+            $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
         }else {
             console.log(status);
         }
