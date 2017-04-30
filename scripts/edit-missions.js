@@ -18,6 +18,7 @@ function saveDesc(m_id){
     }
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
         console.log(status);
+        closeEdit(m_id);
     });
 }
 
