@@ -39,13 +39,13 @@ h1{
     word-wrap: break-word;
     word-break: break-all;
 }
-.m-head-left:hover ~ .m-head {
+.m-head-left.no-edit:hover ~ .m-head {
     height: auto;
 }
-.m-head-left:hover{
+.m-head-left.no-edit:hover{
     width: 100%;
 }
-.m-head-left:hover + .m-head-right{
+.m-head-left.no-edit:hover + .m-head-right{
     display: none;
 }
 .m-head-right{

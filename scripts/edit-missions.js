@@ -45,6 +45,7 @@ function saveMissionDesc(m_id){
     const desc = $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").children("input").val();
     const uMission = {
         id : parseInt(m_id),
+        name : missions[m_id]["name"],
         description : desc,
         start_date : missions[m_id]["start_date"],
         end_date : missions[m_id]["end_date"],

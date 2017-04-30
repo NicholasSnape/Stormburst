@@ -138,10 +138,9 @@ function createCard(missionClone, missions, m_id){
         const _hour = _minute * 60;
         const _day = _hour * 24;
         let timer;
-
+        
         function startCountdown(){
             let today = new Date();
-
             endDate = missions[m_id]["end_date"].substr(0,9);
             endDate += missions[m_id]["end_date"].substr(12,3);
             endDate += missions[m_id]["end_date"].substr(9,3);
