@@ -54,6 +54,7 @@ function saveMissionDesc(m_id){
     
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(desc, status){
         if (status == "success"){
+            console.log(desc);
             missions[m_id]["description"] = desc;
             console.log(missions[m_id]["description"]);
             updateCard(m_id);
