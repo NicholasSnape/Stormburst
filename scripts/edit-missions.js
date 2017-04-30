@@ -1,6 +1,12 @@
 const editMissionClone = $(".edit-mission").clone();
 let descClone;
 
+function closeEdit(m_id){
+    if ($(".edit-mission." + m_id)){
+        $(".edit-mission." + m_id).remove();
+    }
+}
+
 function saveDesc(m_id){
     const desc = $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").children("input").val();
     const uMission = {
