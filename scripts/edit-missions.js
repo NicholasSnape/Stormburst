@@ -1,6 +1,17 @@
 const editMissionClone = $(".edit-mission").clone();
 let descClone;
 
+// PRIZES
+//Display Prize options
+function editPrize(m_id, p_id){
+    let prize = $(".edit-mission").children(".mission").children(".m-body").children(".prize." + p_id);
+    $(prize).attr("style", "height: 20em");
+    $(prize).children(".p-prog").append('<div class="p-text"><p>Hello World!</p></div>');
+}
+
+
+//MISSIONS
+//Mission Name
 function cancelMissionName(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + missions[m_id]["name"] + '<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>')
 }
@@ -35,6 +46,7 @@ function editMissionName(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<button onclick="cancelMissionName(' + m_id + ')">Cancel</button>');
 }
 
+//Mission Description
 function cancelMissionDesc(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p class="m-players">' + missions[m_id]["description"] + '<button class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button></p>')
 }
@@ -71,6 +83,7 @@ function editMissionDesc(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<button onclick="cancelMissionDesc(' + m_id + ')">Cancel</button>');
 }
 
+//Overall Mission
 function closeEdit(m_id){
     if ($(".edit-mission." + m_id)){
         $(".edit-mission." + m_id).remove();
@@ -81,7 +94,7 @@ function editMission(m_id){
     let eMission = editMissionClone.clone();
     eMission.attr("hidden", false);
     eMission.attr("class", "edit-mission " + m_id);
-    createCard(eMission.children(".mission"), missions, m_id);
+    createCard(eMission.children(".mission"), missions, m_id, false);
     // change button to a close one
     eMission.children(".mission").children(".m-head").children(".m-head-right").children("button").attr("onclick", "closeEdit(" + m_id + ")");
     eMission.children(".mission").children(".m-head").children(".m-head-left").children("p").append('<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button>');
@@ -90,6 +103,10 @@ function editMission(m_id){
     eMission.children(".mission").children(".m-body").children(".m-desc").children(".m-players").html(eMission.children(".mission").children(".m-body").children(".m-desc").children(".m-task").html());
     eMission.children(".mission").children(".m-body").children(".m-desc").children(".m-task").remove();
     eMission.children(".mission").children(".m-body").children(".m-desc").children(".m-players").append('<button class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button>');
+    
+    $.each(eMission.children(".mission").children(".m-body").children(".prize"), function(i, obj){
+        $(obj).children(".p-prog").children(".p-text").children("p").append('<button class="edit" onclick="editPrize(' + m_id + ', ' + $(obj).attr("class").substr(6) + ')">&#9881;</button>')
+    });
     
     eMission.appendTo("#main-container");
 }

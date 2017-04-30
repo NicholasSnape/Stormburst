@@ -5,7 +5,7 @@ function updateCard(m_id){
     createCard(mCard, missions, m_id)
 }
 
-function createCard(missionClone, missions, m_id){
+function createCard(missionClone, missions, m_id, showLocked = true){
     // Header of the mission
     // Name
     if (typeof missions[m_id]["name"] != 'undefined'){
@@ -68,7 +68,7 @@ function createCard(missionClone, missions, m_id){
         }else{
             let prevPercent = 100;
             $.each(missions[m_id]["prizes"], function(p){
-                let output = '<div class="prize">';
+                let output = '<div class="prize ' + missions[m_id]["prizes"][p]["id"] + '">';
                 if (typeof missions[m_id]["prizes"][p]["threshold"] == 'undefined'){
                     output += '<p class="p-val">ERROR</p>';
                     console.log("[ERROR] Prize " + missions[m_id]["prizes"][p]["id"] + " threshold is undefined.");
@@ -78,7 +78,7 @@ function createCard(missionClone, missions, m_id){
                 }else{
                     let percent = ((talley/missions[m_id]["prizes"][p]["threshold"])*100).toFixed(0);
                     let cssPercent = 0;
-                    if (prevPercent == 100){
+                    if ((prevPercent == 100) || !showLocked){
                         if (percent >= 75){
                             cssPercent = 75;
                         }else if(percent >= 50){
@@ -95,11 +95,11 @@ function createCard(missionClone, missions, m_id){
                         output += '<p class="p-text">ERROR</p>';
                         console.log("[ERROR] Prize " + p + " has no name.")
                     } else {
-                        output += '<p class="p-text">' + missions[m_id]["prizes"][p]["name"] + '</p>';
+                        output += '<div class="p-text"><p>' + missions[m_id]["prizes"][p]["name"] + '</p></div>';
                     }
                     output += '</div>';
                     if (percent <= 100){
-                        if (prevPercent == 100){
+                        if ((prevPercent == 100) || !showLocked){
                             prevPercent = percent;
                             output += '<p class="p-val">' + percent +'%</p>';
                         }else{

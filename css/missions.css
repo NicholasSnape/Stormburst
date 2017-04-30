@@ -18,6 +18,7 @@ h1{
     margin: 5px;
     box-sizing: border-box;
     width: calc(33% - 10px);
+    min-width: 400px;
     border-radius: 10px;
     overflow: hidden;
     float: left;
@@ -59,7 +60,7 @@ h1{
 
 .edit{
     font-size: 1.5em;
-    margin: -10px 0;
+    margin: -9px 0;
 }
 .edit, .m-head-right button{
     background: transparent;
