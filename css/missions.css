@@ -171,22 +171,22 @@ h1{
     font-size: 0.8em;
 }
 
-.edit-mission{
+.edit-mission-modal{
     width: 100%;
     height: 100%;
     position: absolute;
     background-color: rgba(0,0,0,0.5);
     z-index: 5;
 }
-.edit-mission > .mission{
+.edit-mission-modal > .mission{
     width: 50%;
     margin: auto;
     float: none;
 }
-.edit-mission .m-body{
+.edit-mission-modal .m-body{
     overflow-y: auto;
     height: auto;
 }
-.edit-mission .m-desc:hover > .m-players{
+.edit-mission-modal .m-desc:hover > .m-players{
     display: inline;
 }
