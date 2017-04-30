@@ -1,11 +1,16 @@
 const editMissionClone = $(".edit-mission").clone();
 let descClone;
 
+function cancelMissionDesc(m_id){
+    $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p class="m-players">' + $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").children("input").attr("placeholder") + '<button class="edit" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>')
+}
+
 function saveMissionName(m_id){
-    /*const name = $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").children("input").val();
+    const name = $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").children("input").val();
     const uMission = {
         id : parseInt(m_id),
-        description : desc,
+        name : name,
+        description : missions[m_id]["description"],
         start_date : missions[m_id]["start_date"],
         end_date : missions[m_id]["end_date"],
         members : missions[m_id]["members"]
@@ -13,14 +18,13 @@ function saveMissionName(m_id){
     
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
         if (status == "success"){
-            missions[m_id]["description"] = desc;
+            missions[m_id]["name"] = name;
             updateCard(m_id);
-            $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
-            closeEdit(m_id);
+            $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p>' + missions[m_id]["name"] + '<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>');
         }else {
             console.log(status);
         }
-    });*/
+    });
 }
 
 function editMissionName(m_id){
@@ -29,12 +33,6 @@ function editMissionName(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<input style="width: 50%" type="text" placeholder="' + missions[m_id]["name"] + '">');
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<button onclick="saveMissionName(' + m_id + ')">Save</button>');
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<button>Cancel</button>');
-}
-
-function closeEdit(m_id){
-    if ($(".edit-mission." + m_id)){
-        $(".edit-mission." + m_id).remove();
-    }
 }
 
 function cancelMissionDesc(m_id){
@@ -56,8 +54,7 @@ function saveMissionDesc(m_id){
         if (status == "success"){
             missions[m_id]["description"] = desc;
             updateCard(m_id);
-            $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
-            closeEdit(m_id);
+            $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
         }else {
             console.log(status);
         }
@@ -71,6 +68,12 @@ function editMissionDesc(m_id){
     $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<input style="width: 50%" type="text" placeholder="' + missions[m_id]["description"] + '">');
     $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<button onclick="saveMissionDesc(' + m_id + ')">Save</button>');
     $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<button onclick="cancelMissionDesc(' + m_id + ')">Cancel</button>');
+}
+
+function closeEdit(m_id){
+    if ($(".edit-mission." + m_id)){
+        $(".edit-mission." + m_id).remove();
+    }
 }
 
 function editMission(m_id){
