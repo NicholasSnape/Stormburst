@@ -1,5 +1,10 @@
 let missions;
 
+function updateCard(m_id){
+    let mCard = $(".mission." + m_id);
+    createCard(mCard, missions, m_id)
+}
+
 function createCard(missionClone, missions, m_id){
     // Header of the mission
     // Name
@@ -178,13 +183,6 @@ function createCard(missionClone, missions, m_id){
         missionClone.children(".m-footer").children(".m-end").children(".m-days").html(missions[m_id]["end_date"].substr(0,8));
     }
 };
-
-function getPrizePercentage(mission, prize){
-    if (typeof mission["performance"] == 'array'){
-        
-    }
-    const performance = getTotalPerformance(mission["performance"])
-}
 
 function getTotalPerformance(performance, m_id){
     let currTally = 0;
