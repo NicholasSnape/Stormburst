@@ -20,7 +20,7 @@ function saveMissionName(m_id){
         if (status == "success"){
             missions[m_id]["name"] = name;
             updateCard(m_id);
-            $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p>' + missions[m_id]["name"] + '<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>');
+            $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + name + '</p><button class="edit" style="float: left" onclick="editMissionName(1157)">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
         }else {
             console.log(status);
         }
@@ -49,6 +49,7 @@ function saveMissionDesc(m_id){
         end_date : missions[m_id]["end_date"],
         members : missions[m_id]["members"]
     }
+    
     
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
         if (status == "success"){
