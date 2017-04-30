@@ -54,9 +54,7 @@ function saveMissionDesc(m_id){
     
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
         if (status == "success"){
-            console.log(desc);
-            missions[m_id]["description"] = uMission["description"];
-            console.log(missions[m_id]["description"]);
+            missions[m_id]["description"] = desc;
             updateCard(m_id);
             $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
             closeEdit(m_id);
