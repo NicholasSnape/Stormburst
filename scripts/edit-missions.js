@@ -1,8 +1,8 @@
 const editMissionClone = $(".edit-mission").clone();
 let descClone;
 
-function cancelMissionDesc(m_id){
-    $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p class="m-players">' + $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").children("input").attr("placeholder") + '<button class="edit" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>')
+function cancelMissionName(m_id){
+    $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + missions[m_id]["name"] + '<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>')
 }
 
 function saveMissionName(m_id){
@@ -32,11 +32,11 @@ function editMissionName(m_id){
     
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<input style="width: 50%" type="text" placeholder="' + missions[m_id]["name"] + '">');
     $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<button onclick="saveMissionName(' + m_id + ')">Save</button>');
-    $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<button>Cancel</button>');
+    $(".edit-mission." + m_id).children(".mission").children(".m-head").children(".m-head-left").append('<button onclick="cancelMissionName(' + m_id + ')">Cancel</button>');
 }
 
 function cancelMissionDesc(m_id){
-    $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p class="m-players">' + $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").children("input").attr("placeholder") + '<button class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button></p>')
+    $(".edit-mission." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p class="m-players">' + missions[m_id]["description"] + '<button class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button></p>')
 }
 
 function saveMissionDesc(m_id){
