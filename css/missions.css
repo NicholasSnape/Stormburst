@@ -56,18 +56,19 @@ h1{
 .m-head-right p{
     float: right;
 }
-.m-head-right button{
-    background: transparent;
-    border: 0;
+
+.edit{
     font-size: 1.5em;
-    float: right;
     margin: -10px 0;
 }
-.m-head-right button:hover{
-    cursor: pointer;
+.edit, .m-head-right button{
+    background: transparent;
+    border: 0;
+    float: right;
+    margin-left: 15px;
 }
-.m-completion{
-    margin-right: 10px;
+.edit:hover, .m-head-right button{
+    cursor: pointer;
 }
 
 .m-body{
@@ -185,7 +186,6 @@ h1{
     overflow-y: auto;
     height: auto;
 }
-.edit-mission button {
-    margin:0;
-    font-size: 1em;
+.edit-mission .m-desc:hover > .m-players{
+    display: inline;
 }

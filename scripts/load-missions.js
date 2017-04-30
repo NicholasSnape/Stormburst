@@ -269,7 +269,7 @@ $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, st
     
     $.each(missions, function(m_id){        
         let missionClone = missionDemo.clone();
-        missionClone.attr("id", m_id);
+        missionClone.attr("class", "mission " + m_id);
         createCard(missionClone, missions, m_id);
         
         
