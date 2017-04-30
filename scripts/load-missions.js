@@ -28,7 +28,7 @@ function createCard(missionClone, missions, m_id){
     // Body of the mission
     // Description
     // Player count
-    missionClone.children(".m-body").children().remove();
+    missionClone.children(".m-body").children(".prize").remove();
     if (typeof missions[m_id]["performance"] == 'object'){
         missionClone.children(".m-body").children(".m-desc").children(".m-players").html(Object.keys(missions[m_id]["performance"]).length + " players");
     } else if (typeof missions[m_id]["performance"] == 'undefined'){
