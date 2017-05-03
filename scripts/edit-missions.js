@@ -1,19 +1,66 @@
 const editMissionClone = $(".edit-mission-modal").clone();
+$(".edit-mission-modal").remove();
+const editPrizeClone = $(".edit-prize-modal").clone();
+$(".edit-prize-modal").remove();
 let descClone;
 
 // PRIZES
+function closeEditPrize(p_id){
+    $(".edit-prize-modal." + p_id).remove();
+}
+
+function savePrize(m_id, p_id){
+    console.log("Saved");
+    const uPrize = {
+        "id" : p_id,
+        "name" : $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val || $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").attr("placeholder"),
+        "description" : $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val || $(".edit-prize-modal." + p_id).children(".edit-description").children(".edit-prize-option.edit-prize-name").children("p").children("input").attr("placeholder"),
+        "threshold" : $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val || $(".edit-prize-modal." + p_id).children(".edit-description").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").attr("placeholder")
+    }
+    
+    $.post("https://www.oneupsales.io/tech-test/update-objective", function(uPrize, status){
+        if (status == "success"){
+            missions[m_id]["prizes"][p_id] = uPrize;
+            updateCard(m_id);
+            closeEditPrize(p_id);
+            alert("Saved prize");
+        }else {
+            console.log(status);
+        }
+    });
+}
+
 //Display Prize options
 function editPrize(m_id, p_id){
-    let prize = $(".edit-mission-modal").children(".mission").children(".m-body").children(".prize." + p_id);
-    $(prize).attr("style", "height: 20em");
-    $(prize).children(".p-prog").append('<div class="p-text"><p>Hello World!</p></div>');
+    let ePrize = editPrizeClone.clone();
+    let prize = -1;
+    
+    ePrize.attr("class", ePrize.attr("class") + " " + p_id);
+    
+    $.each(missions[m_id]["prizes"], function(i){
+        if (missions[m_id]["prizes"][i]["id"] == p_id){
+            prize = i;
+        }
+    });
+    
+    ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ")");
+    
+    ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name" placeholder="' + missions[m_id]["prizes"][prize]["name"] + '"></p></div>');
+    
+    ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-description"><p>Description: <input name="desc" placeholder="' + missions[m_id]["prizes"][prize]["description"] + '"></p></div>');
+    
+    ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-threshold"><p>Threshold: <input type="number" name="threshold" placeholder="' + missions[m_id]["prizes"][prize]["threshold"] + '"></p></div>');
+    
+    ePrize.attr("hidden", false);
+    ePrize.appendTo("#main-container");
 }
 
 
 //MISSIONS
 //Mission Name
 function cancelMissionName(m_id){
-    $(".edit-mission-modal." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + missions[m_id]["name"] + '<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>')
+    $(".edit-mission-modal." + m_id).children(".mission").children(".m-head").children(".m-head-left").html('<p style="float: left">' + missions[m_id]["name"] + '<button class="edit" style="float: none" onclick="editMissionName(' + m_id + ')">&#9881;</button></p>');
 }
 
 function saveMissionName(m_id){
