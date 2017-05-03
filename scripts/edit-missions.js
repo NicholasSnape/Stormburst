@@ -9,7 +9,7 @@ function closeEditPrize(p_id){
     $(".edit-prize-modal." + p_id).remove();
 }
 
-function savePrize(m_id, p_id){
+function savePrize(m_id, p_id, pos){
     console.log("Saved");
     const uPrize = {
         "id" : p_id,
@@ -20,7 +20,7 @@ function savePrize(m_id, p_id){
     
     $.post("https://www.oneupsales.io/tech-test/update-objective", function(uPrize, status){
         if (status == "success"){
-            missions[m_id]["prizes"][p_id] = uPrize;
+            missions[m_id]["prizes"][pos] = uPrize;
             updateCard(m_id);
             closeEditPrize(p_id);
             alert("Saved prize");
@@ -43,7 +43,7 @@ function editPrize(m_id, p_id){
         }
     });
     
-    ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ", " + i + )");
     ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ")");
     
     ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name" placeholder="' + missions[m_id]["prizes"][prize]["name"] + '"></p></div>');
