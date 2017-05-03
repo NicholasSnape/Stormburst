@@ -43,7 +43,7 @@ function editPrize(m_id, p_id){
         }
     });
     
-    ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ", " + i + )");
+    ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ", " + i + ")");
     ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ")");
     
     ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name" placeholder="' + missions[m_id]["prizes"][prize]["name"] + '"></p></div>');
