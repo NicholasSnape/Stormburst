@@ -43,6 +43,7 @@ function savePrize(m_id, p_id, pos){
             missions[m_id]["prizes"][pos]["description"] = description;
             missions[m_id]["prizes"][pos]["threshold"] = threshold;
             updateCard(m_id);
+            editMission(m_id);
             closeEditPrize(p_id);
             alert("Saved prize");
         }else {
@@ -55,6 +56,8 @@ function savePrize(m_id, p_id, pos){
 function editPrize(m_id, p_id){
     let ePrize = editPrizeClone.clone();
     let prize = -1;
+    
+    $(".edit-mission-modal." + m_id).remove();
     
     ePrize.attr("class", ePrize.attr("class") + " " + p_id);
     

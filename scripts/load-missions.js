@@ -1,8 +1,7 @@
 let missions;
-
 function updateCard(m_id){
     let mCard = $(".mission." + m_id);
-    createCard(mCard, missions, m_id)
+    createCard(mCard, missions, m_id);
 }
 
 function createCard(missionClone, missions, m_id, showLocked = true){
