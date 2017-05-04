@@ -40,6 +40,7 @@ function savePrize(m_id, p_id, pos){
         "description" :  description,
         "threshold" :  threshold
     }
+    console.log(uPrize);
 
     $.post("https://www.oneupsales.io/tech-test/update-objective", function(uPrize, status){
         if (status == "success"){
