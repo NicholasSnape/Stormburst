@@ -10,12 +10,35 @@ function closeEditPrize(p_id){
 }
 
 function savePrize(m_id, p_id, pos){
-    console.log("Saved");
+    let name,
+        description,
+        threshold;
+    
+    if ($(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val() == ""){
+        name = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").attr("placeholder");
+    } else {
+        name = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val();
+    }
+    if ($(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val() == ""){
+        description = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").attr("placeholder");
+    } else {
+        description = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val();
+    }
+    if ($(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val() == ""){
+        threshold = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").attr("placeholder");
+    } else {
+        threshold = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val();
+    }
+    
+    console.log("Name: " + name);
+    console.log("Description: " + description);
+    console.log("Threshold: " + threshold);
+    
     const uPrize = {
         "id" : p_id,
-        "name" : $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val || $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").attr("placeholder"),
-        "description" : $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val || $(".edit-prize-modal." + p_id).children(".edit-description").children(".edit-prize-option.edit-prize-name").children("p").children("input").attr("placeholder"),
-        "threshold" : $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val || $(".edit-prize-modal." + p_id).children(".edit-description").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").attr("placeholder")
+        "name" :  name,
+        "description" :  description,
+        "threshold" :  threshold
     }
     
     $.post("https://www.oneupsales.io/tech-test/update-objective", function(uPrize, status){
