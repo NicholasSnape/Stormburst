@@ -30,22 +30,18 @@ function savePrize(m_id, p_id, pos){
         threshold = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val();
     }
     
-    console.log("Name: " + name);
-    console.log("Description: " + description);
-    console.log("Threshold: " + threshold);
-    
     const uPrize = {
         "id" : p_id,
         "name" :  name,
         "description" :  description,
         "threshold" :  threshold
     }
-    console.log(uPrize);
 
     $.post("https://www.oneupsales.io/tech-test/update-objective", function(uPrize, status){
         if (status == "success"){
-            missions[m_id]["prizes"][pos] = uPrize;
-            console.log(uPrize);
+            missions[m_id]["prizes"][pos]["name"] = name;
+            missions[m_id]["prizes"][pos]["description"] = description;
+            missions[m_id]["prizes"][pos]["threshold"] = threshold;
             updateCard(m_id);
             closeEditPrize(p_id);
             alert("Saved prize");
