@@ -40,11 +40,11 @@ function savePrize(m_id, p_id, pos){
         "description" :  description,
         "threshold" :  threshold
     }
-    console.log(uPrize);
+
     $.post("https://www.oneupsales.io/tech-test/update-objective", function(uPrize, status){
         if (status == "success"){
             missions[m_id]["prizes"][pos] = uPrize;
-            console.log(missions[m_id]["prizes"][pos]);
+            console.log(uPrize);
             updateCard(m_id);
             closeEditPrize(p_id);
             alert("Saved prize");
