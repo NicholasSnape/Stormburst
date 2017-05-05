@@ -6,9 +6,10 @@ let descClone;
 
 // PRIZES
 function saveNewPrize(m_id){
-    if ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val() == ""){return}
-    if ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val() == ""){return}
-    if ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val() == ""){return}
+    if (($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val() == "") || ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val() == "") || ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val() == "")){
+        alert("One or more of the inputs is empty, please fill them in and try again.")
+        return
+    }
     
     const pos = Object.keys(missions[m_id]["prizes"]).length;
     
@@ -18,7 +19,7 @@ function saveNewPrize(m_id){
         "description" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val(),
         "threshold" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val()
     }
-
+    
     $.post("https://www.oneupsales.io/tech-test/create-objective", function(nPrize, status){
         if (status == "success"){
             missions[m_id]["prizes"][pos] = {}
@@ -45,7 +46,7 @@ function addPrize(m_id){
     ePrize.attr("class", ePrize.attr("class") + " " + p_id);
     
     ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveNewPrize(" + m_id + ")");
-    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ", " + m_id + ")");
     
     ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name"></p></div>');
     
@@ -57,8 +58,9 @@ function addPrize(m_id){
     ePrize.appendTo("#main-container");
 }
 
-function closeEditPrize(p_id){
+function closeEditPrize(p_id, m_id){
     $(".edit-prize-modal." + p_id).remove();
+    editMission(m_id);
 }
 
 function savePrize(m_id, p_id, pos){
@@ -96,7 +98,7 @@ function savePrize(m_id, p_id, pos){
             missions[m_id]["prizes"][pos]["threshold"] = threshold;
             updateCard(m_id);
             editMission(m_id);
-            closeEditPrize(p_id);
+            closeEditPrize(p_id, m_id);
             alert("Saved prize");
         }else {
             console.log(status);
@@ -120,7 +122,7 @@ function editPrize(m_id, p_id){
     });
     
     ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ", " + prize + ")");
-    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ", " + m_id + ")");
     
     ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name" placeholder="' + missions[m_id]["prizes"][prize]["name"] + '"></p></div>');
     
