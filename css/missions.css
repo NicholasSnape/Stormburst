@@ -23,6 +23,7 @@ h1{
     overflow: hidden;
     float: left;
     font-size: 1em;
+    position: relative;
 }
 
 .m-head{
@@ -223,4 +224,26 @@ h1{
 
 input{
     width: 50%;
+}
+
+#new-mission{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    float: none;
+    margin: 0;
+    background-color: rgba(0,0,0,0.6);
+}
+#new-mission:hover{
+    background-color: rgba(0,0,0,0.4);
+}
+
+.performance{
+    padding: 10px;
+    height: 13em;
+}
+.performance p{
+    padding: 2px;
 }

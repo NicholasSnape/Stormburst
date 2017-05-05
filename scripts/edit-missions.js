@@ -4,6 +4,10 @@ const editPrizeClone = $(".edit-prize-modal").clone();
 $(".edit-prize-modal").remove();
 let descClone;
 
+function addMembers(m_id){
+    
+}
+
 // PRIZES
 function saveNewPrize(m_id){
     if (($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val() == "") || ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val() == "") || ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val() == "")){
@@ -235,7 +239,13 @@ function editMission(m_id){
         $(obj).children(".p-prog").children(".p-text").children("p").append('<button class="edit" onclick="editPrize(' + m_id + ', ' + $(obj).attr("class").substr(6) + ')">&#9881;</button>')
     });
     
-    eMission.children(".mission").children(".m-body").append('<div class="prize"><div class="p-prog p-prog-0" style="width: 0"><div class="p-text"><button class="edit" style="font-size: 1em; margin: 0" onclick="addPrize(' + m_id + ')">+ Add new Objective</button></p></div></div></div>')
+    eMission.children(".mission").children(".m-body").append('<div class="prize"><div class="p-prog p-prog-0" style="width: 0"><div class="p-text"><button class="edit" style="font-size: 1em; margin: 0" onclick="addPrize(' + m_id + ')">+ Add new Objective</button></p></div></div></div>');
+    eMission.children(".mission").children(".m-body").append('<div class="performance"></div>')
+    
+    $.each(missions[m_id]["performance"], function(i, count){
+        eMission.children(".mission").children(".m-body").children(".performance").append('<p>' + members[i]["forename"] + ' ' + members[i]["surname"] + ': ' + count + '</p>');
+    });
+     eMission.children(".mission").children(".m-body").children(".performance").append('<button onclick="addMembers(' + m_id + ')">Add Member</button>')
     
     eMission.appendTo("#main-container");
 }

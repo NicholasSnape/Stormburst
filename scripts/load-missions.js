@@ -1,4 +1,5 @@
-let missions;
+let missions,
+    members;
 function updateCard(m_id){
     let mCard = $(".mission." + m_id);
     createCard(mCard, missions, m_id);
@@ -261,6 +262,7 @@ $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, st
     $("#status").remove();
     data = JSON.parse(data);
     missions = data["missions"];
+    members = data["users"];
     let missionDemo = $("#main-container").children(".mission").clone();
     missionDemo.attr("hidden", false);
     
@@ -272,4 +274,10 @@ $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, st
         
         missionClone.appendTo($("#main-container"));
     });
+    
+    let addMissionClone = missionDemo.clone();
+    addMissionClone.attr("class", "mission add");
+    addMissionClone.children(".m-head").children(".m-head-right").children("button").remove();
+    addMissionClone.append('<button class="edit" id="new-mission" onclick="editMission()">+ Add New</button>');
+    addMissionClone.appendTo($("#main-container"));
 }); 
