@@ -5,6 +5,57 @@ $(".edit-prize-modal").remove();
 let descClone;
 
 // PRIZES
+function saveNewPrize(m_id){
+    if ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val() == ""){return}
+    if ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val() == ""){return}
+    if ($(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val() == ""){return}
+    
+    const pos = Object.keys(missions[m_id]["prizes"]).length;
+    
+    const nPrize = {
+        "mission_id" : m_id,
+        "name" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val(),
+        "description" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val(),
+        "threshold" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val()
+    }
+
+    $.post("https://www.oneupsales.io/tech-test/create-objective", function(nPrize, status){
+        if (status == "success"){
+            missions[m_id]["prizes"][pos]["name"] = name;
+            missions[m_id]["prizes"][pos]["description"] = description;
+            missions[m_id]["prizes"][pos]["threshold"] = threshold;
+            updateCard(m_id);
+            editMission(m_id);
+            closeEditPrize(p_id);
+            alert("Saved prize");
+        }else {
+            console.log(status);
+        }
+    });
+}
+
+function addPrize(m_id){
+    let ePrize = editPrizeClone.clone();
+    let prize = -1;
+    const p_id = missions[m_id]["prizes"][missions[m_id]["prizes"].length-1]["id"] + 1;
+    
+    $(".edit-mission-modal." + m_id).remove();
+    
+    ePrize.attr("class", ePrize.attr("class") + " " + p_id);
+    
+    ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveNewPrize(" + m_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ")");
+    
+    ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name"></p></div>');
+    
+    ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-description"><p>Description: <input name="desc"></p></div>');
+    
+    ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-threshold"><p>Threshold: <input type="number" name="threshold"></p></div>');
+    
+    ePrize.attr("hidden", false);
+    ePrize.appendTo("#main-container");
+}
+
 function closeEditPrize(p_id){
     $(".edit-prize-modal." + p_id).remove();
 }
@@ -178,6 +229,8 @@ function editMission(m_id){
     $.each(eMission.children(".mission").children(".m-body").children(".prize"), function(i, obj){
         $(obj).children(".p-prog").children(".p-text").children("p").append('<button class="edit" onclick="editPrize(' + m_id + ', ' + $(obj).attr("class").substr(6) + ')">&#9881;</button>')
     });
+    
+    eMission.children(".mission").children(".m-body").append('<div class="prize"><div class="p-prog p-prog-0" style="width: 0"><div class="p-text"><button class="edit" style="font-size: 1em; margin: 0" onclick="addPrize(' + m_id + ')">+ Add new Objective</button></p></div></div></div>')
     
     eMission.appendTo("#main-container");
 }
