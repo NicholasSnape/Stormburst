@@ -22,10 +22,12 @@ function saveNewPrize(m_id){
     
     $.post("https://www.oneupsales.io/tech-test/create-objective", function(nPrize, status){
         if (status == "success"){
-            missions[m_id]["prizes"][pos] = {}
-            missions[m_id]["prizes"][pos]["name"] = nPrize["name"];
-            missions[m_id]["prizes"][pos]["description"] = nPrize["description"];
-            missions[m_id]["prizes"][pos]["threshold"] = nPrize["threshold"];
+            missions[m_id]["prizes"][pos] = {
+                "mission_id" : m_id,
+                "name" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val(),
+                "description" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val(),
+                "threshold" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val()
+            }
             updateCard(m_id);
             editMission(m_id);
             $(".edit-prize-modal").remove();
