@@ -27,13 +27,15 @@ function addMember(m_id, member_id){
 
 function addMembers(m_id){
     let membersList = editPrizeClone.clone();
+    let newMembers = false;
     $.each(members, function(id, member){
         if (missions[m_id]["members"].indexOf(parseInt(id)) == -1){
             membersList.children(".edit-prize").append('<div class="edit-prize-option ' + id + '"><p>' + member["forename"] + ' ' + member["surname"] + '<button style="float: none;" onclick="addMember(' + m_id + ',' + id + ')">Add</button></p></div>');
+            newMembers = true
         }
     });
     
-    if (membersList.children(".edit-prize-option").length == 0){
+    if (!newMembers){
         alert("All members are already participating in this mission. Removal of members is not permitted.");
         return;
     }
