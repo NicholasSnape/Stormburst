@@ -1,8 +1,16 @@
 let missions,
-    members;
+    members,
+    metrics;
 function updateCard(m_id){
     let mCard = $(".mission." + m_id);
     createCard(mCard, missions, m_id);
+}
+
+function createAddMissionCard(missionClone){
+    missionClone.attr("class", "mission add");
+    missionClone.children(".m-head").children(".m-head-right").children("button").remove();
+    missionClone.append('<button class="edit" id="new-mission" onclick="addMission()">+ Add New</button>');
+    missionClone.appendTo($("#main-container"));
 }
 
 function createCard(missionClone, missions, m_id, showLocked = true){
@@ -263,6 +271,7 @@ $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, st
     data = JSON.parse(data);
     missions = data["missions"];
     members = data["users"];
+    metrics = data["metrics"];
     let missionDemo = $("#main-container").children(".mission").clone();
     missionDemo.attr("hidden", false);
     
@@ -276,8 +285,5 @@ $.get("https://www.oneupsales.io/tech-test/get-missions-data", function(data, st
     });
     
     let addMissionClone = missionDemo.clone();
-    addMissionClone.attr("class", "mission add");
-    addMissionClone.children(".m-head").children(".m-head-right").children("button").remove();
-    addMissionClone.append('<button class="edit" id="new-mission" onclick="editMission()">+ Add New</button>');
-    addMissionClone.appendTo($("#main-container"));
+    createAddMissionCard(addMissionClone);
 }); 

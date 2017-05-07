@@ -23,7 +23,7 @@ function saveNewPrize(m_id){
         alert("One of the inputs is incorrect.");
         return;
     }
-    if (!checkDesc(description)){
+    if (!checkDesc(desc)){
         alert("One of the inputs is incorrect.");
         return;
     }
@@ -107,7 +107,7 @@ function savePrize(m_id, p_id, pos){
     } else {
         threshold = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val();
     }
-    
+        
     if (!checkName(name)){
         alert("One of the inputs is incorrect.");
         return;
@@ -138,6 +138,7 @@ function savePrize(m_id, p_id, pos){
             closeEditPrize(p_id, m_id);
             alert("Saved prize");
         }else {
+            alert("Prize couldn't be saved. Please try again later.")
             console.log(status);
         }
     });
@@ -251,6 +252,98 @@ function editMissionDesc(m_id){
     $(".edit-mission-modal." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<input style="width: 50%" type="text" placeholder="' + missions[m_id]["description"] + '">');
     $(".edit-mission-modal." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<button onclick="saveMissionDesc(' + m_id + ')">Save</button>');
     $(".edit-mission-modal." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<button onclick="cancelMissionDesc(' + m_id + ')">Cancel</button>');
+}
+
+//Add Mission
+function closeNewMission(){
+    $(".edit-prize-modal.new").remove();
+}
+
+function saveNewMission(){
+    const missionDetailsModal = $(".edit-prize-modal.new");
+    
+    if (missionDetailsModal == 'undefined'){return}
+    
+    const name = missionDetailsModal.children(".edit-prize").children(".create-mission-name").children("p").children("input").val(),
+          desc =  missionDetailsModal.children(".edit-prize").children(".create-mission-description").children("p").children("input").val(),
+          metric = missionDetailsModal.children(".edit-prize").children(".create-mission-metric").children("p").children("select").val(),
+          startDate = missionDetailsModal.children(".edit-prize").children(".create-mission-start-date").children("p").children("input").val(),
+          endDate = missionDetailsModal.children(".edit-prize").children(".create-mission-end-date").children("p").children("input").val();
+    
+    const startDateCheck = checkDate(startDate),
+          endDateCheck = checkDate(endDate);
+    let dateCheck = true;
+    
+    if (startDateCheck && endDateCheck){
+        if (startDate > endDate){dateCheck = false}
+        else{dateCheck = true}
+    } else{
+        dateCheck = false;
+    }
+    if (!checkName(name) || !checkDesc(desc) || !dateCheck){
+        alert("One of the inputs doesn't fit the criteria.");
+        return;
+    }
+    
+    const newMissionDetails = {
+        "name" : name,
+        "description" : desc,
+        "metric_id" : metric,
+        "start_date" : startDate,
+        "end_date" : endDate,
+        "members" : []
+    }
+    
+    $.post("https://www.oneupsales.io/tech-test/create-mission", function(newMissionDetails, status){
+        if (status == "success"){
+            const pos = Math.max.apply(null, Object.keys(test).filter(isFinite)) + 1;
+            missions[pos]["id"] = pos;
+            missions[pos]["name"] = name;
+            missions[pos]["description"] = description;
+            missions[pos]["start_date"] = startDate;
+            missions[pos]["end_date"] = endDate;
+            missions[pos]["metric_id"] = metric;
+            missions[pos]["members"] = [];
+            missions[pos]["performance"] = {};
+            missions[pos]["prizes"] = [];
+            
+            $(".mission.add").remove();
+            let newMissionCard = editMissionClone().clone();
+            createCard(newMissionCard, missions, pos);
+            createAddMissionCard();
+            closeNewMission();
+            alert("Added new mission.");
+        }else{
+            alert("New mission couldn't be saved. Please try again later.");
+            console.log(status);
+        }
+    });
+}
+
+function addMission(){
+    let newMission = editPrizeClone.clone();
+    
+    newMission.attr("class", "edit-prize-modal new");
+    
+    newMission.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveNewMission()");
+    newMission.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeNewMission()");
+    
+    newMission.children(".edit-prize").append('<div class="edit-prize-option create-mission-name"><p>Name: <input name="name"></p></div>');
+    
+    newMission.children(".edit-prize").append('<div class="edit-prize-option create-mission-description"><p>Description: <input name="desc"></p></div>');
+    
+    newMission.children(".edit-prize").append('<div class="edit-prize-option create-mission-metric"><p>Metric: <select></select></p></div>');
+    
+    $.each(metrics, function(i, metric){
+         newMission.children(".edit-prize").children(".create-mission-metric").children("p").children("select").append('<option value="' + i + '">' + metric["name"] + '</option>');
+    });
+    
+    newMission.children(".edit-prize").append('<div class="edit-prize-option create-mission-start-date"><p>Start Date: <input type="datetime-local" name="start"></p></div>');
+    
+    newMission.children(".edit-prize").append('<div class="edit-prize-option create-mission-end-date"><p>End Date: <input type="datetime-local" name="end"></p></div>');
+    
+    newMission.attr("hidden", false);
+    newMission.appendTo("#main-container");
 }
 
 //Overall Mission
