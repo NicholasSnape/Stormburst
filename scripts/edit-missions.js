@@ -15,22 +15,40 @@ function saveNewPrize(m_id){
         return
     }
     
+    const name = $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val(),
+          desc = $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val(),
+          threshold = $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val();
+    
+    if (!checkName(name)){
+        alert("One of the inputs is incorrect.");
+        return;
+    }
+    if (!checkDesc(description)){
+        alert("One of the inputs is incorrect.");
+        return;
+    }
+    if (!checkThreshold(threshold)){
+        alert("One of the inputs is incorrect.");
+        return;
+    }
+    
+    
     const pos = Object.keys(missions[m_id]["prizes"]).length;
     
     const nPrize = {
         "mission_id" : m_id,
-        "name" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val(),
-        "description" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val(),
-        "threshold" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val()
+        "name" :  name,
+        "description" :  desc,
+        "threshold" :  threshold
     }
     
     $.post("https://www.oneupsales.io/tech-test/create-objective", function(nPrize, status){
         if (status == "success"){
             missions[m_id]["prizes"][pos] = {
                 "mission_id" : m_id,
-                "name" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-name").children("p").children("input").val(),
-                "description" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-description").children("p").children("input").val(),
-                "threshold" :  $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val()
+                "name" :  name,
+                "description" :  desc,
+                "threshold" :  threshold
             }
             updateCard(m_id);
             editMission(m_id);
@@ -88,6 +106,19 @@ function savePrize(m_id, p_id, pos){
         threshold = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").attr("placeholder");
     } else {
         threshold = $(".edit-prize-modal." + p_id).children(".edit-prize").children(".edit-prize-option.edit-prize-threshold").children("p").children("input").val();
+    }
+    
+    if (!checkName(name)){
+        alert("One of the inputs is incorrect.");
+        return;
+    }
+    if (!checkDesc(description)){
+        alert("One of the inputs is incorrect.");
+        return;
+    }
+    if (!checkThreshold(threshold)){
+        alert("One of the inputs is incorrect.");
+        return;
     }
     
     const uPrize = {
@@ -149,6 +180,10 @@ function cancelMissionName(m_id){
 
 function saveMissionName(m_id){
     const name = $(".edit-mission-modal." + m_id).children(".mission").children(".m-head").children(".m-head-left").children("input").val();
+    if (!checkName(name)){
+        alert("Mission name invalid.");
+        return;
+    }
     const uMission = {
         id : parseInt(m_id),
         name : name,
@@ -184,6 +219,10 @@ function cancelMissionDesc(m_id){
 
 function saveMissionDesc(m_id){
     const desc = $(".edit-mission-modal." + m_id).children(".mission").children(".m-body").children(".m-desc").children("input").val();
+    if (!checkDesc(desc)){
+        alert("Mission description invalid.");
+        return;
+    }
     const uMission = {
         id : parseInt(m_id),
         name : missions[m_id]["name"],
