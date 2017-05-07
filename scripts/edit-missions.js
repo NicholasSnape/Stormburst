@@ -282,6 +282,7 @@ function saveMissionDesc(m_id){
             updateCard(m_id);
             $(".edit-mission-modal." + m_id).children(".mission").children(".m-body").children(".m-desc").html('<p style="float: left">' + desc + '</p><button style="float: left" class="edit" onclick="editMissionDesc(' + m_id + ')">&#9881;</button><p style="color: red; display : block; float: left; padding-left: 10px">Saved</p>');
         }else {
+            alert("Couldn't update Description. Please try again later.");
             console.log(status);
         }
     });
@@ -297,10 +298,52 @@ function editMissionDesc(m_id){
 }
 
 //Mission Start/End Dates
+function saveStartDate(m_id){
+    
+    let startDate = $(".edit-prize-modal").children(".edit-prize").children(".edit-mission-start-date").children("p").children("input").val();
+    if (!(checkDate(startDate))){
+        alert("Start date is not a valid input");
+        return;
+    }
+    startDate = formatDate(startDate);
+    if (startDate > missions[m_id]["end_date"]){
+        alert("Start date is after the End Date");
+        return;
+    }
+    
+    const uMission = {
+        id : parseInt(m_id),
+        name : missions[m_id]["name"],
+        description : missions[m_id]["description"],
+        start_date : startDate,
+        end_date : missions[m_id]["end_date"],
+        members : missions[m_id]["members"]
+    }
+    
+    
+    $.post("https://www.oneupsales.io/tech-test/update-mission", function(uMission, status){
+        if (status == "success"){
+            missions[m_id]["start_date"] = startDate;
+            updateCard(m_id);
+            editMission(m_id);
+            $(".edit-prize-modal").remove();
+        }else {
+            alert("Couldn't update the Start Date. Please try again later");
+            console.log(status);
+        }
+    });
+    
+}
+
 function editStartDate(m_id){
-    let startDateModal = editPrize.clone();
+    let startDateModal = editPrizeClone.clone();
     
     startDateModal.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + m_id + ")");
+    startDateModal.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveStartDate(" + m_id + ")");
+    startDateModal.children(".edit-prize").append('<div class="edit-prize-option edit-mission-start-date"><p>Start Date: <input type="datetime-local" name="end"></p></div>');
+    
+    startDateModal.attr("hidden", false);
+    startDateModal.appendTo($("#main-container"));
 }
 
 function saveEndDate(m_id){
@@ -312,7 +355,7 @@ function saveEndDate(m_id){
     }
     endDate = formatDate(endDate);
     if (endDate < missions[m_id]["start_date"]){
-        alert("End date is not a valid input");
+        alert("End date is before the Start Date");
         return;
     }
     
@@ -326,13 +369,14 @@ function saveEndDate(m_id){
     }
     
     
-    $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
+    $.post("https://www.oneupsales.io/tech-test/update-mission", function(uMission, status){
         if (status == "success"){
             missions[m_id]["end_date"] = endDate;
             updateCard(m_id);
             editMission(m_id);
             $(".edit-prize-modal").remove();
         }else {
+            alert("Couldn't update the End Date. Please try again later");
             console.log(status);
         }
     });
