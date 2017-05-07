@@ -296,7 +296,7 @@ function saveNewMission(){
     
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(newMissionDetails, status){
         if (status == "success"){
-            const pos = Math.max.apply(null, Object.keys(test).filter(isFinite)) + 1;
+            const pos = Math.max.apply(null, Object.keys(missions).filter(isFinite)) + 1;
             missions[pos]["id"] = pos;
             missions[pos]["name"] = name;
             missions[pos]["description"] = description;
