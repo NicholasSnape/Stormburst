@@ -4,8 +4,40 @@ const editPrizeClone = $(".edit-prize-modal").clone();
 $(".edit-prize-modal").remove();
 let descClone;
 
-function addMembers(m_id){
+function closeMembers(){
+    $(".edit-prize-modal").remove();
+}
+
+function addMember(m_id, member_id){
+    let m = missions[m_id];
+    m["members"].push(member_id);
+    m["performance"][member_id] = 0;
     
+    $.post("https://www.oneupsales.io/tech-test/create-mission", function(m, status){
+        if (status == "success"){
+            $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option." + member_id).children("p").children("button").html('Added');
+            $(".edit-prize-modal").children(".edit-prize").children(".edit-prize-option." + member_id).children("p").children("button").attr("onclick", "");
+        }else {
+            alert("Couldn't add this member. Please try again later.");
+            console.log(status);
+        }
+    });
+    
+}
+
+function addMembers(m_id){
+    $(".edit-mission-modal").remove();
+    let membersList = editPrizeClone.clone();
+    $.each(members, function(id, member){
+        if (missions[m_id]["members"].indexOf(id) == -1){
+            membersList.children(".edit-prize").append('<div class="edit-prize-option"><p>' + member["forename"] + ' ' + member["surname"] + '<button style="float: none;" onclick="addMember(' + m_id + ',' + id + ')">Add</button></p></div>');
+        }
+    });
+    membersList.children(".edit-prize").children(".edit-prize-save").remove();
+    membersList.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeMembers()");
+    
+    membersList.attr("hidden", false);
+    membersList.appendTo("#main-container");
 }
 
 // PRIZES
