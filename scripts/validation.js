@@ -50,3 +50,7 @@ function checkDate(dateToCheck){
     
     return true;
 }
+
+function formatDate(dateToChange){
+    return dateToChange.substr(11) + ":00 " + dateToChange.substr(8,2) + "/" + dateToChange.substr(5, 2) + "/" + dateToChange.substr(0,4)
+}

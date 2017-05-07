@@ -4,11 +4,6 @@ const editPrizeClone = $(".edit-prize-modal").clone();
 $(".edit-prize-modal").remove();
 let descClone;
 
-function closeMembers(m_id){
-    $(".edit-prize-modal").remove();
-    editMission(m_id);
-}
-
 function addMember(m_id, member_id){
     let m = missions[m_id];
     m["members"].push(member_id);
@@ -44,7 +39,7 @@ function addMembers(m_id){
     $(".edit-mission-modal").remove();
     
     membersList.children(".edit-prize").children(".edit-prize-save").remove();
-    membersList.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeMembers(" + m_id + ")");
+    membersList.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + m_id + ")");
     
     membersList.attr("hidden", false);
     membersList.appendTo("#main-container");
@@ -114,7 +109,7 @@ function addPrize(m_id){
     ePrize.attr("class", ePrize.attr("class") + " " + p_id);
     
     ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveNewPrize(" + m_id + ")");
-    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ", " + m_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + m_id + ")");
     
     ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name"></p></div>');
     
@@ -126,9 +121,12 @@ function addPrize(m_id){
     ePrize.appendTo("#main-container");
 }
 
-function closeEditPrize(p_id, m_id){
-    $(".edit-prize-modal." + p_id).remove();
-    editMission(m_id);
+function closeEditPrize(m_id = -1){
+    $(".edit-prize-modal").remove();
+    
+    if (m_id != -1){
+        editMission(m_id);
+    }
 }
 
 function savePrize(m_id, p_id, pos){
@@ -179,7 +177,7 @@ function savePrize(m_id, p_id, pos){
             missions[m_id]["prizes"][pos]["threshold"] = threshold;
             updateCard(m_id);
             editMission(m_id);
-            closeEditPrize(p_id, m_id);
+            closeEditPrize(m_id);
             alert("Saved prize");
         }else {
             alert("Prize couldn't be saved. Please try again later.")
@@ -204,7 +202,7 @@ function editPrize(m_id, p_id){
     });
     
     ePrize.children(".edit-prize").children(".edit-prize-save").attr("onclick", "savePrize(" + m_id + "," + p_id + ", " + prize + ")");
-    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + p_id + ", " + m_id + ")");
+    ePrize.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + m_id + ")");
     
     ePrize.children(".edit-prize").append('<div class="edit-prize-option edit-prize-name"><p>Name: <input name="name" placeholder="' + missions[m_id]["prizes"][prize]["name"] + '"></p></div>');
     
@@ -298,9 +296,59 @@ function editMissionDesc(m_id){
     $(".edit-mission-modal." + m_id).children(".mission").children(".m-body").children(".m-desc").append('<button onclick="cancelMissionDesc(' + m_id + ')">Cancel</button>');
 }
 
-//Add Mission
-function closeNewMission(){
-    $(".edit-prize-modal.new").remove();
+//Mission Start/End Dates
+function editStartDate(m_id){
+    let startDateModal = editPrize.clone();
+    
+    startDateModal.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + m_id + ")");
+}
+
+function saveEndDate(m_id){
+    
+    let endDate = $(".edit-prize-modal").children(".edit-prize").children(".edit-mission-start-date").children("p").children("input").val();
+    
+    if (!(checkDate(endDate))){
+        alert("End date is not a valid input");
+        return;
+    }
+    endDate = formatDate(endDate);
+    if (endDate < missions[m_id]["start_date"]){
+        alert("End date is not a valid input");
+        return;
+    }
+    
+    const uMission = {
+        id : parseInt(m_id),
+        name : missions[m_id]["name"],
+        description : missions[m_id]["description"],
+        start_date : missions[m_id]["start_date"],
+        end_date : endDate,
+        members : missions[m_id]["members"]
+    }
+    
+    
+    $.post("https://www.oneupsales.io/tech-test/create-mission", function(uMission, status){
+        if (status == "success"){
+            missions[m_id]["end_date"] = endDate;
+            updateCard(m_id);
+            editMission(m_id);
+            $(".edit-prize-modal").remove();
+        }else {
+            console.log(status);
+        }
+    });
+    
+}
+
+function editEndDate(m_id){
+    let endDateModal = editPrizeClone.clone();
+    
+    endDateModal.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize(" + m_id + ")");
+    endDateModal.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveEndDate(" + m_id + ")");
+    endDateModal.children(".edit-prize").append('<div class="edit-prize-option edit-mission-end-date"><p>End Date: <input type="datetime-local" name="end"></p></div>');
+    
+    endDateModal.attr("hidden", false);
+    endDateModal.appendTo($("#main-container"));
 }
 
 function saveNewMission(){
@@ -347,8 +395,8 @@ function saveNewMission(){
             missions[pos]["id"] = pos;
             missions[pos]["name"] = name;
             missions[pos]["description"] = desc;
-            missions[pos]["start_date"] = startDate.substr(11) + ":00 " + startDate.substr(8,2) + "/" + startDate.substr(5, 2) + "/" + startDate.substr(0,4);
-            missions[pos]["end_date"] = endDate.substr(11) + ":00 " + endDate.substr(8,2) + "/" + endDate.substr(5, 2) + "/" + endDate.substr(0,4);
+            missions[pos]["start_date"] = formatDate(startDate);
+            missions[pos]["end_date"] = formatDate(endDate);
             missions[pos]["metric_id"] = metric;
             missions[pos]["members"] = [];
             missions[pos]["performance"] = {};
@@ -377,7 +425,7 @@ function addMission(){
     newMission.attr("class", "edit-prize-modal new");
     
     newMission.children(".edit-prize").children(".edit-prize-save").attr("onclick", "saveNewMission()");
-    newMission.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeNewMission()");
+    newMission.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeEditPrize()");
     
     newMission.children(".edit-prize").append('<div class="edit-prize-option create-mission-name"><p>Name: <input name="name"></p></div>');
     
@@ -428,7 +476,10 @@ function editMission(m_id){
     $.each(missions[m_id]["performance"], function(i, count){
         eMission.children(".mission").children(".m-body").children(".performance").append('<p>' + members[i]["forename"] + ' ' + members[i]["surname"] + ': ' + count + '</p>');
     });
-     eMission.children(".mission").children(".m-body").children(".performance").append('<button onclick="addMembers(' + m_id + ')">Add Member</button>')
+    eMission.children(".mission").children(".m-body").children(".performance").append('<button onclick="addMembers(' + m_id + ')">Add Member</button>');
+    
+    eMission.children(".mission").children(".m-footer").children(".m-start").children(".m-days").append('<button class="edit" onclick="editStartDate(' + m_id + ')">&#9881;</button>')
+    eMission.children(".mission").children(".m-footer").children(".m-end").children(".m-days").append('<button class="edit" onclick="editEndDate(' + m_id + ')">&#9881;</button>')
     
     eMission.appendTo("#main-container");
 }
