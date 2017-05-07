@@ -63,7 +63,9 @@ function saveNewPrize(m_id){
 function addPrize(m_id){
     let ePrize = editPrizeClone.clone();
     let prize = -1;
-    const p_id = missions[m_id]["prizes"][missions[m_id]["prizes"].length-1]["id"] + 1;
+    let p_id;
+    if (missions[m_id]["prizes"].length-1 < 0){p_id = 1}
+    else{p_id = missions[m_id]["prizes"][missions[m_id]["prizes"].length-1]["id"] + 1};
     
     $(".edit-mission-modal." + m_id).remove();
     
@@ -294,24 +296,30 @@ function saveNewMission(){
         "members" : []
     }
     
+    
+    
     $.post("https://www.oneupsales.io/tech-test/create-mission", function(newMissionDetails, status){
         if (status == "success"){
             const pos = Math.max.apply(null, Object.keys(missions).filter(isFinite)) + 1;
+            missions[pos] = {};
             missions[pos]["id"] = pos;
             missions[pos]["name"] = name;
-            missions[pos]["description"] = description;
-            missions[pos]["start_date"] = startDate;
-            missions[pos]["end_date"] = endDate;
+            missions[pos]["description"] = desc;
+            missions[pos]["start_date"] = startDate.substr(11) + ":00 " + startDate.substr(8,2) + "/" + startDate.substr(5, 2) + "/" + startDate.substr(0,4);
+            missions[pos]["end_date"] = endDate.substr(11) + ":00 " + endDate.substr(8,2) + "/" + endDate.substr(5, 2) + "/" + endDate.substr(0,4);
             missions[pos]["metric_id"] = metric;
             missions[pos]["members"] = [];
             missions[pos]["performance"] = {};
             missions[pos]["prizes"] = [];
-            
+
             $(".mission.add").remove();
-            let newMissionCard = editMissionClone().clone();
+            let newMissionCard = missionDemo.clone(),
+                newAddNewCard = missionDemo.clone();
             createCard(newMissionCard, missions, pos);
-            createAddMissionCard();
+            createAddMissionCard(newAddNewCard);
             closeNewMission();
+            newMissionCard.appendTo($("#main-container"));
+            newAddNewCard.appendTo($("#main-container"));
             alert("Added new mission.");
         }else{
             alert("New mission couldn't be saved. Please try again later.");
