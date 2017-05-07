@@ -305,8 +305,7 @@ function editStartDate(m_id){
 
 function saveEndDate(m_id){
     
-    let endDate = $(".edit-prize-modal").children(".edit-prize").children(".edit-mission-start-date").children("p").children("input").val();
-    
+    let endDate = $(".edit-prize-modal").children(".edit-prize").children(".edit-mission-end-date").children("p").children("input").val();
     if (!(checkDate(endDate))){
         alert("End date is not a valid input");
         return;
