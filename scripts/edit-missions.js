@@ -315,6 +315,7 @@ function saveNewMission(){
             $(".mission.add").remove();
             let newMissionCard = missionDemo.clone(),
                 newAddNewCard = missionDemo.clone();
+            newMissionCard.attr("class", "mission " + pos);
             createCard(newMissionCard, missions, pos);
             createAddMissionCard(newAddNewCard);
             closeNewMission();
