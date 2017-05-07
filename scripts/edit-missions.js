@@ -4,8 +4,9 @@ const editPrizeClone = $(".edit-prize-modal").clone();
 $(".edit-prize-modal").remove();
 let descClone;
 
-function closeMembers(){
+function closeMembers(m_id){
     $(".edit-prize-modal").remove();
+    editMission(m_id);
 }
 
 function addMember(m_id, member_id){
@@ -43,7 +44,7 @@ function addMembers(m_id){
     $(".edit-mission-modal").remove();
     
     membersList.children(".edit-prize").children(".edit-prize-save").remove();
-    membersList.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeMembers()");
+    membersList.children(".edit-prize").children(".edit-prize-close").attr("onclick", "closeMembers(" + m_id + ")");
     
     membersList.attr("hidden", false);
     membersList.appendTo("#main-container");
